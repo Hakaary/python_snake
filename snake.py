@@ -2,18 +2,28 @@ import keyboard
 from time import sleep
 import os
 import datetime
+import random
 
 class Snake():
 
-    def __init__(self, posx=12, posy=6, next=None, char='#', direction=None):
+    def __init__(self, posx=12, posy=6, next=None, char='#', direction=None, positions=None,length=None):
         self.posx = posx
         self.posy = posy
         self.char = char
         self.next = next
-        self.direction = direction 
+        self.direction = direction
+        self.positions = positions
+        self.length = length
+
+class Fruit():
+
+    def __init__(self, posx=None, posy=None, placed=False):
+        self.posx = posx
+        self.posy = posy
+        self.placed = placed
 
 class Snake_game():
-
+    
     panel= [
             ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
             ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
@@ -27,10 +37,27 @@ class Snake_game():
             ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
             ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
             ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
-            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·']
-            ]
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],            
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],            
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],            
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],            
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],            
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+            ['·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·', '·'],
+        ]
 
-    head_snake = Snake(char='@', next=Snake(posx=11, posy=6, next=Snake(posx=10, posy=6)), direction='right')
+    head_snake = Snake(char='@', next=Snake(posx=11, posy=6, next=Snake(posx=10, posy=6)), direction='right', positions={(12, 6), (11, 6), (10, 6)}, length=3)
+    prev_direction = head_snake.direction
+    fruit = Fruit()
 
     def __init__(self):
 
@@ -41,6 +68,11 @@ class Snake_game():
         self.place_snake()
         self.print_game()
 
+        sleep(1)
+
+        # Place fruit
+        self.place_fruit()
+
         while True:
 
             self.input_key()
@@ -49,19 +81,40 @@ class Snake_game():
 
                 # Calculate snakes new position
                 last_tail_val = self.move_snake()
+
+                # Check if the snake has gone over itself
+                self.check_end()
+
                 # Reset panel
                 self.clean_panel(last_tail_val)
+
+                # Check if new position includes fruit
+                if self.is_fruit():            
+                    self.append_tail(last_tail_val)
+
                 # Place snake in the panel
                 self.place_snake()
 
-                # Final step
+                # Place fruit
+                self.place_fruit()
+
+                # Final step 
                 os.system('cls' if os.name == 'nt' else 'clear')
                 self.print_game()
 
-                # Refresh time
+                print(self.head_snake.positions)
+                print(len(self.head_snake.positions))
+                print(self.head_snake.length)
+
+                # Refresh time and prev_direction
                 time = datetime.datetime.now()
+                self.prev_direction = self.head_snake.direction
 
     def input_key(self):
+
+        # Prevents being able to turn over the snake itself
+        if self.prev_direction is not self.head_snake.direction:
+            return
 
         if keyboard.is_pressed('d') and self.head_snake.direction is not 'left':
             self.head_snake.direction = 'right'
@@ -71,6 +124,66 @@ class Snake_game():
             self.head_snake.direction = 'up'
         elif keyboard.is_pressed('s') and self.head_snake.direction is not 'up':
             self.head_snake.direction = 'down'
+
+    def check_end(self):
+
+        if self.head_snake.length == (len(self.panel[0]) * len(self.panel)):
+            os.system('cls' if os.name == 'nt' else 'clear')
+
+            print("#   #   #   # #  #   #")
+            print(" #   # #   #  #  ##  #")
+            print("  #   #   #   #  # # #")
+            print("   # # # #    #  #  ##")
+            print("    #   #     #  #   #")
+
+            exit()
+
+        if self.head_snake.length != len(self.head_snake.positions):
+            os.system('cls' if os.name == 'nt' else 'clear')
+
+            print("#####     #      #  #")
+            print("#        # #     #  #")
+            print("###     #####    #  #")
+            print("#      #     #   #  #")
+            print("#     #       #  #  #####")
+
+            exit()
+
+    def append_tail(self, last_tail_val):
+
+        snake = self.head_snake
+
+        while snake.next is not None:
+            snake = snake.next
+
+        snake.next = Snake(posx=last_tail_val[0], posy=last_tail_val[1])
+
+        self.head_snake.length = self.head_snake.length + 1
+
+    def is_fruit(self):
+
+        if self.head_snake.posx == self.fruit.posx and self.head_snake.posy == self.fruit.posy:
+            
+            self.fruit.placed = False
+
+            return True
+
+        return False
+
+    def place_fruit(self):
+
+        if not self.fruit.placed:
+
+            possible_positions = set([(a, b) for b in range(len(self.panel)) for a in range(len(self.panel[0]))]) - self.head_snake.positions
+            possible_positions = list(possible_positions) 
+            position = random.choice(possible_positions)
+
+            self.panel[position[1]][position[0]] = '+'
+
+            self.fruit.posx = position[0]
+            self.fruit.posy = position[1]
+
+            self.fruit.placed = True
 
     def move_snake(self):
        
@@ -119,17 +232,17 @@ class Snake_game():
         snake_placement = []
 
         while snake is not None:
-            snake_placement.append((snake.posx, snake.posy, snake.char))
+            self.panel[snake.posy][snake.posx] = snake.char
+            snake_placement.append((snake.posx, snake.posy))
             snake = snake.next
 
-        for pos in snake_placement:
-            self.panel[pos[1]][pos[0]] = pos[2]
+        self.head_snake.positions = set(snake_placement)
 
     def print_game(self):
 
         for i in range(len(self.panel)):
             for j in range(len(self.panel[i])):
-                print(self.panel[i][j], end='')
+                print(self.panel[i][j], end=' ')
             print()
 
 
