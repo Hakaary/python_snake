@@ -102,10 +102,6 @@ class Snake_game():
                 os.system('cls' if os.name == 'nt' else 'clear')
                 self.print_game()
 
-                print(self.head_snake.positions)
-                print(len(self.head_snake.positions))
-                print(self.head_snake.length)
-
                 # Refresh time and prev_direction
                 time = datetime.datetime.now()
                 self.prev_direction = self.head_snake.direction
