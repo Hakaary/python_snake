@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "python-snake"
+version = "0.1.0"
+description = "A simple and classic Snake game"
+authors = ["Hakaary <luisreyero@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+sshkeyboard = "^2.3.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+
+[tool.poetry.scripts]
+snake = "python_snake:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
