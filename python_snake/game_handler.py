@@ -35,7 +35,9 @@ class GameHandler:
     def __init_board(self, dimension: int) -> None:
         self.board = Board(dimension)
 
-    def __init_snake(self, initial_direction: SnakeDirection, initial_length: int = 2) -> None:
+    def __init_snake(
+        self, initial_direction: SnakeDirection, initial_length: int = 2
+    ) -> None:
         self.snake = Snake(
             SnakeNode(
                 initial_direction,
@@ -49,7 +51,10 @@ class GameHandler:
 
     def __init_fruit(self) -> None:
         self.fruit = Fruit(0, 0)
-        self.fruit.place_fruit(BOARD_DIMENSION, self.snake.s_positions)  # type: ignore
+        self.fruit.place_fruit(
+            BOARD_DIMENSION,
+            self.snake.s_positions,  # type: ignore
+        )
 
     def __init_keyboard_capture(self) -> None:
         self.user_input = UserInput()
@@ -77,6 +82,9 @@ class GameHandler:
             raise ValueError("User input not initialized")
 
         lst_frame = datetime.now()
+
+        os.system("cls" if os.name == "nt" else "clear")
+
         while True:
 
             # Quit game
@@ -85,20 +93,29 @@ class GameHandler:
                 break
 
             # Frame rate control
-            if lst_frame + timedelta(seconds=(1 / self.tick_rate)) > datetime.now():
+            if (
+                lst_frame + timedelta(seconds=(1 / self.tick_rate))
+                > datetime.now()
+            ):
                 continue
             lst_frame = datetime.now()
 
-            os.system("cls" if os.name == "nt" else "clear")
-
             if self.user_input.last_key == Key.UP:
-                self.snake.change_head_direction(SnakeDirection(SnakeDirection.UP))
+                self.snake.change_head_direction(
+                    SnakeDirection(SnakeDirection.UP)
+                )
             if self.user_input.last_key == Key.DOWN:
-                self.snake.change_head_direction(SnakeDirection(SnakeDirection.DOWN))
+                self.snake.change_head_direction(
+                    SnakeDirection(SnakeDirection.DOWN)
+                )
             if self.user_input.last_key == Key.LEFT:
-                self.snake.change_head_direction(SnakeDirection(SnakeDirection.LEFT))
+                self.snake.change_head_direction(
+                    SnakeDirection(SnakeDirection.LEFT)
+                )
             if self.user_input.last_key == Key.RIGHT:
-                self.snake.change_head_direction(SnakeDirection(SnakeDirection.RIGHT))
+                self.snake.change_head_direction(
+                    SnakeDirection(SnakeDirection.RIGHT)
+                )
 
             # Move
             tail_last_pos = self.snake.move()
@@ -112,6 +129,7 @@ class GameHandler:
 
             # Check if snake collides with itself
             if self.snake.сheck_collision():
+                os.system("cls" if os.name == "nt" else "clear")
                 exit("Game over!")
 
             self.board.clean_board(tail_last_pos)

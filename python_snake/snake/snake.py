@@ -38,13 +38,25 @@ class Snake:
             head = head.next_node  # type: ignore
 
     def change_head_direction(self, direction: SnakeDirection) -> None:
-        if direction == SnakeDirection.UP and self.head.direction != SnakeDirection.DOWN:
+        if (
+            direction == SnakeDirection.UP
+            and self.head.direction != SnakeDirection.DOWN
+        ):
             self.head.direction = direction
-        if direction == SnakeDirection.DOWN and self.head.direction != SnakeDirection.UP:
+        if (
+            direction == SnakeDirection.DOWN
+            and self.head.direction != SnakeDirection.UP
+        ):
             self.head.direction = direction
-        if direction == SnakeDirection.LEFT and self.head.direction != SnakeDirection.RIGHT:
+        if (
+            direction == SnakeDirection.LEFT
+            and self.head.direction != SnakeDirection.RIGHT
+        ):
             self.head.direction = direction
-        if direction == SnakeDirection.RIGHT and self.head.direction != SnakeDirection.LEFT:
+        if (
+            direction == SnakeDirection.RIGHT
+            and self.head.direction != SnakeDirection.LEFT
+        ):
             self.head.direction = direction
 
     def _move_up(self) -> None:
@@ -120,13 +132,21 @@ class Snake:
             _tail = _tail.next_node
 
         if _tail.direction == SnakeDirection.UP:
-            new_node = SnakeNode(SnakeDirection.UP, _tail.pos_x, _tail.pos_y + 1)
+            new_node = SnakeNode(
+                SnakeDirection.UP, _tail.pos_x, _tail.pos_y + 1
+            )
         if _tail.direction == SnakeDirection.DOWN:
-            new_node = SnakeNode(SnakeDirection.DOWN, _tail.pos_x, _tail.pos_y - 1)
+            new_node = SnakeNode(
+                SnakeDirection.DOWN, _tail.pos_x, _tail.pos_y - 1
+            )
         if _tail.direction == SnakeDirection.LEFT:
-            new_node = SnakeNode(SnakeDirection.LEFT, _tail.pos_x + 1, _tail.pos_y)
+            new_node = SnakeNode(
+                SnakeDirection.LEFT, _tail.pos_x + 1, _tail.pos_y
+            )
         if _tail.direction == SnakeDirection.RIGHT:
-            new_node = SnakeNode(SnakeDirection.RIGHT, _tail.pos_x - 1, _tail.pos_y)
+            new_node = SnakeNode(
+                SnakeDirection.RIGHT, _tail.pos_x - 1, _tail.pos_y
+            )
         _tail.next_node = new_node
         self.l_positions.append((new_node.pos_x, new_node.pos_y))
         self.s_positions.add((new_node.pos_x, new_node.pos_y))

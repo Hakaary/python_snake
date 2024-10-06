@@ -1,4 +1,5 @@
 from typing import List, Tuple
+import sys
 
 from python_snake.snake import SnakeCharacter
 
@@ -24,12 +25,15 @@ class Board:
     def place_snake(self, snake_positions: List[Tuple[int, int]]) -> None:
         for pos in reversed(snake_positions[1:]):
             self.board[pos[1]][pos[0]] = SnakeCharacter.BODY.value
-        self.board[snake_positions[0][1]][snake_positions[0][0]] = SnakeCharacter.HEAD.value
+        self.board[snake_positions[0][1]][
+            snake_positions[0][0]
+        ] = SnakeCharacter.HEAD.value
 
     def place_fruit(self, fruit_position: Tuple[int, int]) -> None:
         self.board[fruit_position[1]][fruit_position[0]] = "$"
 
     def draw_board(self) -> None:
+        sys.stdout.write("\033[F" * len(self.board))
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
                 print(self.board[i][j], end=" ")
